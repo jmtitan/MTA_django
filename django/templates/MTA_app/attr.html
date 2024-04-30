@@ -1,0 +1,443 @@
+{% extends 'MTA_app/base.html' %}
+{% load static %}
+{% block head_content %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href={% static 'MTA_app/css/bootstrap.css' %} rel="stylesheet">
+    <link  href={% static 'MTA_app/css/base.css' %}  rel="stylesheet">
+{% endblock %}
+{% block title_content %}实时广告归因{% endblock %}
+
+{% block js_content %}
+        <script src="../../static/MTA_app/js/jquery.min.js"></script>
+        <script src="../../static/MTA_app/js/highcharts.js"></script>
+        <script src="../../static/MTA_app/js/bootstrap.js/"></script>
+        <script src="../../static/MTA_app/js/oldie.js"></script>
+        <script src="../../static/MTA_app/js/highcharts-zh_CN.js"></script>
+        <script src="../../static/MTA_app/js/base.js"></script>
+        <script type="text/javascript"></script>
+{% endblock %}
+
+{% block body_content %}
+    <div class="container-fluid container-fluid-s">
+        <div class="row">
+            <div class="col-md-12 col-lg-12 mrbt">
+                <div class="totalbox">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-pills totaltitle" role="tablist">
+                        <li class="fl"><p>各广告归因统计图</p></li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="fbt-month">
+                            <div id="fbt-monthchart" style="width: 100%;height: 100%;"></div>
+                            <script src="https://code.highcharts.com/highcharts.src.js"></script>
+                                <script>
+                                        Highcharts.chart('fbt-monthchart', {
+                                            chart: {
+                                                        backgroundColor: '#1e2131',
+                                                        plotBackgroundColor: null,
+                                                        plotBorderWidth: null,
+                                                        plotShadow: false
+                                                    },
+                                                    title: false,
+                                                    tooltip: {
+                                                        headerFormat: '{series.name}<br>',
+                                                        pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>'
+                                                    },
+                                                    exporting:{ enabled:false, //用来设置是否显示‘打印’,'导出'等功能按钮，不设置时默认为显示
+                                                    },
+                                                    credits:{
+                                                        enabled: false // 禁用版权信息
+                                                    },
+                                                    legend: {
+                                                        layout: 'horizontal',
+                                                        align: 'center',
+                                                        verticalAlign: 'bottom',
+                                                        itemStyle: { cursor: 'pointer', color: 								'#FFF' },
+                                                        itemHiddenStyle: { color: '#CCC' },
+                                                    },
+                                                    plotOptions: {
+                                                        pie: {
+                                                            allowPointSelect: true,
+                                                            cursor: 'pointer',
+                                                            dataLabels: {
+                                                                enabled: true,
+                                                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                                                style: {
+                                                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || '#FFF'
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    series: [{
+                                                        type: 'pie',
+                                                        name: '各广告归因占比',
+                                                        data: [
+                                                            {% for k,v in roi%}
+                                                                {
+                                                                    name:'{{ k }}',
+                                                                    y: {{ v }}
+
+                                                                }
+                                                            {% if not forloop.last %}, {% endif %}
+                                                            {% endfor %}
+                                                        ]
+                                                    }]
+                                        })
+                                </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 col-lg-12 mrbt">
+                <div class="totalbox">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-pills totaltitle" role="tablist">
+                        <li class="fl"><p>各广告渠道转化量</p></li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="zxlx">
+                            <div id="convertnum" style="width: 100%;height: 100%;"></div>
+                            <script src="https://code.highcharts.com/highcharts.src.js"></script>
+                                <script>
+                                Highcharts.chart('convertnum', {
+                                    chart: {
+                                                backgroundColor: '#1e2131',
+                                                type: 'column',
+                                                plotBorderColor: '#1c2a38',
+                                                plotBorderWidth: 1,
+                                            },
+                                            title:false,
+                                            xAxis: {
+                                                gridLineColor: '#1c2a38',//网格线
+                                                tickColor:'#1c2a38',//刻度线
+                                                lineColor: '#1c2a38',//轴线
+                                                categories: [
+                                                    {% for k,v in c_conv%}
+                                                        '{{ k }}'
+                                                        {% if not forloop.last %}, {% endif %}
+                                                    {% endfor %}
+                                                ]
+                                            },
+                                            yAxis: {
+                                                min: 0,
+                                                title:false,
+                                                gridLineColor: '#1c2a38',//网格线
+                                                tickColor:'#1c2a38',//刻度线
+                                                stackLabels: {
+                                                    enabled: true,
+                                                    style: {
+                                                        fontWeight: 'bold',
+                                                        color: (Highcharts.theme && Highcharts.theme.textColor) || '#fff'
+                                                    }//柱形图上方数据显示
+                                                }
+                                            },
+                                            exporting:{ enabled:false, //用来设置是否显示‘打印’,'导出'等功能按钮，不设置时默认为显示
+                                            },
+                                            credits:{
+                                                enabled: false // 禁用版权信息
+                                            },
+                                            legend: {
+                                                layout: 'horizontal',
+                                                align: 'center',
+                                                verticalAlign: 'bottom',
+                                                itemStyle: { cursor: 'pointer', color: 								'#FFF' },
+                                                itemHiddenStyle: { color: '#CCC' },
+                                            },
+                                            tooltip: {
+                                                formatter: function () {
+                                                    return '<b>' + this.x + '</b><br/>' +
+                                                        this.series.name + ': ' + this.y + '<br/>' +
+                                                        '总量: ' + this.point.stackTotal;
+                                                }
+                                            },
+                                            plotOptions: {
+                                                column: {           //不显示阴影
+                                                    stacking: 'normal',
+                                                    bar: false,
+                                                    borderWidth: 0,  //柱子边框的大小
+                                                },
+                                            },
+                                            series: [{
+                                                name: '转化量',
+                                                data: [
+                                                    {% for k,v in c_conv%}
+                                                        {{v}}
+                                                        {% if not forloop.last %}, {% endif %}
+                                                    {% endfor %}
+                                                ]
+                                            }]
+                                        })
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-6 col-lg-6 mrbt">
+                <div class="totalbox">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-pills totaltitle" role="tablist">
+                        <li class="fl"><p>总转化量对比</p></li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="zxlx">
+                            <div id="convertcompare" style="width: 100%;height: 100%;"></div>
+                            <script src="https://code.highcharts.com/highcharts.src.js"></script>
+                                <script>
+                                Highcharts.chart('convertcompare', {
+                                    chart: {
+                                                backgroundColor: '#1e2131',
+                                                type: 'column',
+                                                plotBorderColor: '#1c2a38',
+                                                plotBorderWidth: 1,
+                                            },
+                                            title:false,
+                                            xAxis: {
+                                                gridLineColor: '#1c2a38',//网格线
+                                                tickColor:'#1c2a38',//刻度线
+                                                lineColor: '#1c2a38',//轴线
+                                                categories: [
+                                                    {% for k,v in convert%}
+                                                        '{{ k }}'
+                                                        {% if not forloop.last %}, {% endif %}
+                                                    {% endfor %}
+                                                ]
+                                            },
+                                            yAxis: {
+                                                min: 0,
+                                                title:false,
+                                                gridLineColor: '#1c2a38',//网格线
+                                                tickColor:'#1c2a38',//刻度线
+                                                stackLabels: {
+                                                    enabled: true,
+                                                    style: {
+                                                        fontWeight: 'bold',
+                                                        color: (Highcharts.theme && Highcharts.theme.textColor) || '#fff'
+                                                    }//柱形图上方数据显示
+                                                }
+                                            },
+                                            exporting:{ enabled:false, //用来设置是否显示‘打印’,'导出'等功能按钮，不设置时默认为显示
+                                            },
+                                            credits:{
+                                                enabled: false // 禁用版权信息
+                                            },
+                                            legend: {
+                                                layout: 'horizontal',
+                                                align: 'center',
+                                                verticalAlign: 'bottom',
+                                                itemStyle: { cursor: 'pointer', color: 								'#FFF' },
+                                                itemHiddenStyle: { color: '#CCC' },
+                                            },
+                                            tooltip: {
+                                                formatter: function () {
+                                                    return '<b>' + this.x + '</b><br/>' +
+                                                        this.series.name + ': ' + this.y + '<br/>' +
+                                                        '总量: ' + this.point.stackTotal;
+                                                }
+                                            },
+                                            plotOptions: {
+                                                column: {           //不显示阴影
+                                                    stacking: 'normal',
+                                                    bar: false,
+                                                    borderWidth: 0,  //柱子边框的大小
+                                                },
+                                            },
+                                            series: [{
+                                                name: '转化量',
+                                                data: [
+                                                    {% for k,v in convert%}
+                                                        {{v}}
+                                                        {% if not forloop.last %}, {% endif %}
+                                                    {% endfor %}
+                                                ]
+                                            }]
+                                        })
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-6 mrbt">
+                <div class="totalbox">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-pills totaltitle" role="tablist">
+                        <li class="fl"><p>总成本对比</p></li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="zxlx">
+                            <div id="costcomp" style="width: 100%;height: 100%;"></div>
+                            <script src="https://code.highcharts.com/highcharts.src.js"></script>
+                                <script>
+                                Highcharts.chart('costcomp', {
+                                    chart: {
+                                                backgroundColor: '#1e2131',
+                                                type: 'column',
+                                                plotBorderColor: '#1c2a38',
+                                                plotBorderWidth: 1,
+                                            },
+                                            title:false,
+                                            xAxis: {
+                                                gridLineColor: '#1c2a38',//网格线
+                                                tickColor:'#1c2a38',//刻度线
+                                                lineColor: '#1c2a38',//轴线
+                                                categories: [
+                                                    {% for k,v in cost%}
+                                                        '{{ k }}'
+                                                        {% if not forloop.last %}, {% endif %}
+                                                    {% endfor %}
+                                                ]
+                                            },
+                                            yAxis: {
+                                                min: 0,
+                                                title:false,
+                                                gridLineColor: '#1c2a38',//网格线
+                                                tickColor:'#1c2a38',//刻度线
+                                                stackLabels: {
+                                                    enabled: true,
+                                                    style: {
+                                                        fontWeight: 'bold',
+                                                        color: (Highcharts.theme && Highcharts.theme.textColor) || '#fff'
+                                                    }//柱形图上方数据显示
+                                                }
+                                            },
+                                            exporting:{ enabled:false, //用来设置是否显示‘打印’,'导出'等功能按钮，不设置时默认为显示
+                                            },
+                                            credits:{
+                                                enabled: false // 禁用版权信息
+                                            },
+                                            legend: {
+                                                layout: 'horizontal',
+                                                align: 'center',
+                                                verticalAlign: 'bottom',
+                                                itemStyle: { cursor: 'pointer', color: 								'#FFF' },
+                                                itemHiddenStyle: { color: '#CCC' },
+                                            },
+                                            tooltip: {
+                                                formatter: function () {
+                                                    return '<b>' + this.x + '</b><br/>' +
+                                                        this.series.name + ': ' + this.y + '<br/>' +
+                                                        '总量: ' + this.point.stackTotal;
+                                                }
+                                            },
+                                            plotOptions: {
+                                                column: {           //不显示阴影
+                                                    stacking: 'normal',
+                                                    bar: false,
+                                                    borderWidth: 0,  //柱子边框的大小
+                                                },
+                                            },
+                                            series: [{
+                                                name: '总成本',
+                                                data: [
+                                                    {% for k,v in cost%}
+                                                        {{v}}
+                                                        {% if not forloop.last %}, {% endif %}
+                                                    {% endfor %}
+                                                ]
+                                            }]
+                                        })
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 col-lg-12 mrbt">
+                <div class="totalbox">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-pills totaltitle" role="tablist">
+                        <li class="fl"><p>相对收益统计图</p></li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="zxlx">
+                            <div id="zxlxchart" style="width: 100%;height: 100%;"></div>
+                            <script>
+                                Highcharts.chart('zxlxchart', {
+                            chart: {
+                                        backgroundColor: '#1e2131',
+                                        type: 'column',
+                                        plotBorderColor: '#1c2a38',
+                                        plotBorderWidth: 1,
+                                    },
+                                    title:false,
+                                    xAxis: {
+                                        gridLineColor: '#1c2a38',//网格线
+                                        tickColor:'#1c2a38',//刻度线
+                                        lineColor: '#1c2a38',//轴线
+                                        categories: [
+                                             {% for k,v in gain%}
+                                                    '{{k}}'
+                                                    {% if not forloop.last %}, {% endif %}
+                                             {% endfor %}
+                                        ]
+                                    },
+                                    yAxis: {
+                                        min: 0,
+                                        title:false,
+                                        gridLineColor: '#1c2a38',//网格线
+                                        tickColor:'#1c2a38',//刻度线
+                                        stackLabels: {
+                                            enabled: true,
+                                            style: {
+                                                fontWeight: 'bold',
+                                                color: (Highcharts.theme && Highcharts.theme.textColor) || '#fff'
+                                            }//柱形图上方数据显示
+                                        }
+                                    },
+                                    exporting:{ enabled:false, //用来设置是否显示‘打印’,'导出'等功能按钮，不设置时默认为显示
+                                    },
+                                    credits:{
+                                        enabled: false // 禁用版权信息
+                                    },
+                                    legend: {
+                                        layout: 'horizontal',
+                                        align: 'center',
+                                        verticalAlign: 'bottom',
+                                        itemStyle: { cursor: 'pointer', color: 								'#FFF' },
+                                        itemHiddenStyle: { color: '#CCC' },
+                                    },
+                                    tooltip: {
+                                        formatter: function () {
+                                            return '<b>' + this.x + '</b><br/>' +
+                                                this.series.name + ': ' + this.y + '<br/>' +
+                                                '总量: ' + this.point.stackTotal;
+                                        }
+                                    },
+                                    plotOptions: {
+                                        column: {           //不显示阴影
+                                            stacking: 'normal',
+                                            bar: false,
+                                            borderWidth: 0,  //柱子边框的大小
+                                        },
+                                    },
+                                    series: [{
+                                        name: '相对收益：转化量/成本',
+                                        data: [
+                                             {% for k,v in gain%}
+                                                    {{v}}
+                                                    {% if not forloop.last %}, {% endif %}
+                                             {% endfor %}
+                                        ]
+                                    }]
+                                })
+                            </script>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

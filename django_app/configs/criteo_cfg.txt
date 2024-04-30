@@ -1,0 +1,22 @@
+dataset=Criteo
+file_U=./MTA_app/files/pkls/U.pkl
+file_C=./MTA_app/files/pkls/C.pkl
+file_T=./MTA_app/files/pkls/T.pkl
+file_Y=./MTA_app/files/pkls/Y.pkl
+file_cost=./MTA_app/files/pkls/cost.pkl
+file_cat1_9=./MTA_app/files/pkls/cat1_9.pkl
+file_CPO=./MTA_app/files/pkls/CPO.pkl
+
+
+with_weight=False
+
+device=cpu
+
+train_test_ratio = 0.7
+
+global_user_num=547347
+global_campaign_size=12
+global_cat_num_list=9,30,57,20,8,30,1656,11,30
+C_embedding_dim = 4
+U_embedding_dim = 5
+cat_embedding_dim_list = 5,5,5,5,5,5,5,5,5

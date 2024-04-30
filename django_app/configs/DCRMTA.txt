@@ -1,0 +1,24 @@
+device=cpu
+multi_gpu=False
+
+model_name=DCRMTA
+pretrained=True
+pretrained_model_path=MTA_app/torch_models/DCRMTA_c.pth
+
+
+
+predictor_learning_rate=0.0001
+predictor_hidden_dim=64
+predictor_hidden_layer_depth=2
+predictor_batch_size=200
+predictor_epoch_num=100
+predictor_drop_rate=0.2
+gradient_reversal_layer=True
+
+
+bce_loss_nita = 0.5
+ce_loss_gamma = 0.5
+cf_loss_delta = 0.5
+
+Budget_proportion = 1.0
+

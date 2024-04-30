@@ -1,0 +1,203 @@
+{% extends 'MTA_app/base.html' %}
+{% load static %}
+{% block head_content %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href={% static 'MTA_app/css/bootstrap.css' %} rel="stylesheet">
+    <link  href={% static 'MTA_app/css/base.css' %}  rel="stylesheet">
+{% endblock %}
+{% block title_content %}实时广告归因{% endblock %}
+
+{% block js_content %}
+        <script src="../../static/MTA_app/js/jquery.min.js"></script>
+{#        <script src="../../static/MTA_app/js/highcharts.js"></script>#}
+        <script src="../../static/MTA_app/js/bootstrap.js/"></script>
+        <script src="../../static/MTA_app/js/oldie.js"></script>
+{#        <script src="../../static/MTA_app/js/highcharts-zh_CN.js"></script>#}
+{#        <script src="../../static/MTA_app/js/base.js"></script>#}
+        <script type="text/javascript"></script>
+{% endblock %}
+
+{% block body_content %}
+    <div class="container-fluid container-fluid-s">
+        <div class="row">
+            <div class="col-md-12 col-lg-12 mrbt">
+                <div class="totalbox">
+                    <ul class="nav nav-pills totaltitle" role="tablist">
+                        <li class="fl"><p>平台当天实时点击量</p></li>
+                    </ul>
+                    <div class="totaltem">
+                        <div class="col-lg-12 total hbule">
+                            <span class="name">总点击量</span>
+                            <span class="number">
+                                <a>{{ tot_campaigns }}</a>
+                            </span>
+                            <span class="name">次</span>
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 0 2vw">
+                        {% for k, v in c_dict %}
+                            <div class="col-md-1">
+                                <div class="column">
+                                    <p>{{ k }}</p>
+                                    <div class="ybule"><span class="bold">{{ v }}</span></div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 col-lg-12 mrbt">
+                <div class="totalbox">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-pills totaltitle" role="tablist">
+                            <li class="fl"><p>广告点击量排行</p></li>
+                        </ul>
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="home">
+                                <div id="container" style="width: 100%;height: 100%;"></div>
+                                <script src="https://code.highcharts.com/highcharts.src.js"></script>
+                                <script>
+                                        Highcharts.chart('container', {
+                                            chart: {
+                                                        type: 'bar',
+                                                        backgroundColor: '#1e2131',
+                                                        plotBorderColor: '#1c2a38',
+                                                        plotBorderWidth: 1,
+                                                    },
+                                                    title: false,//主标题
+                                                    subtitle: false,//副标题
+                                                    exporting:{ enabled:false, //用来设置是否显示‘打印’,'导出'等功能按钮，不设置时默认为显示
+                                                    },
+                                                    xAxis: {
+                                                        categories: [
+                                                            {% for k,v in c_dict%}'{{ k }}'{% if not forloop.last %}, {% endif %}{% endfor %}
+{#                                                            'a','b','c','a','b','c','a','b','c'#}
+                                                        ],
+                                                        labels: {
+                                                            style: {
+                                                                color: '#9ea0ae'
+                                                            }
+                                                        },
+                                                        tickWidth:'0',
+                                                        tickColor:'#1c2a38',
+                                                        lineColor: '#1c2a38',
+                                                    }, // x系列设置
+                                                    yAxis: {
+                                                        // min: 0,
+                                                        title: {
+                                                            text: '点击量',
+                                                            align: 'high'
+                                                        },
+                                                        tickColor:'#1c2a38',
+                                                        gridLineColor: '#1c2a38',
+                                                        labels: {
+                                                            overflow: 'justify'
+                                                        }
+                                                    },// y系列设置
+                                                    tooltip: {
+                                                        valueSuffix: ' 次'
+                                                    },
+                                                    plotOptions: {
+                                                        bar: {
+                                                            dataLabels: {
+                                                                enabled: true,
+                                                                allowOverlap: true,
+                                                                color:'#fff',
+                                                            },
+                                                            borderColor: "",//去边框
+                                                            color:'#0084fe'
+                                                        }
+                                                    },
+                                                    legend:false,
+                                                    credits: {
+                                                        enabled: false
+                                                    },
+                                                    series: [{
+                                                        name: '点击量',
+                                                        data: [
+                                                            {% for k,v in c_dict%}{{ v }}{% if not forloop.last %}, {% endif %}{% endfor %}
+{#                                                            1,2,3,1,2,3,1,2,3#}
+                                                        ],
+                                                        color:'#0084fe',
+                                                        border:'#0084fe'
+                                                    }]
+                                        });
+                                </script>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-12 mrbt">
+                <div class="totalbox">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-pills totaltitle" role="tablist">
+                        <li class="fl"><p>原始总成本分配</p></li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="rj-day">
+                            <div id="rj-daychart" style="width: 100%;height: 100%;"></div>
+                              <script src="https://code.highcharts.com/highcharts.src.js"></script>
+                                <script>
+                                        Highcharts.chart('rj-daychart', {
+                                            chart: {
+                                                        backgroundColor: '#1e2131',
+                                                        plotBackgroundColor: null,
+                                                        plotBorderWidth: null,
+                                                        plotShadow: false,
+                                                        spacing : [20, 0 , 20, 0]
+                                                    },
+                                                    title: false,
+                                                    tooltip: {
+                                                        pointFormat: '{series.name}: <b>{point.percentage:.1f}万</b>'
+                                                    },
+                                                    exporting:{ enabled:false, //用来设置是否显示‘打印’,'导出'等功能按钮，不设置时默认为显示
+                                                    },
+                                                    credits:{
+                                                        enabled: false // 禁用版权信息
+                                                    },
+                                                    plotOptions: {
+                                                        pie: {
+                                                            borderWidth: 0,
+                                                            allowPointSelect: true,
+                                                            cursor: 'pointer',
+                                                            dataLabels: {
+                                                                color:'#fff',
+                                                                enabled: true,
+                                                                format: '<b>{point.name}</b>: {point.percentage:.1f} 万',
+                                                                style: {
+                                                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    series: [{
+                                                        type: 'pie',
+                                                        innerSize: '80%',
+                                                        name: '成本分配',
+                                                        data: [
+                                                            {% for k,v in cost_dict%}
+                                                                {
+                                                                    name:'{{ k }}',
+                                                                    y: {{ v }}
+
+                                                                }
+                                                            {% if not forloop.last %}, {% endif %}
+                                                            {% endfor %}
+                                                        ]
+                                                    }]
+                                        })
+                                </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+   <div style="text-align:center"><a href="http://127.0.0.1:8001/MTA/wait"><button  class="btn btn-primary">归因计算</button></a></div>
+{% endblock %}
