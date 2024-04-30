@@ -5,9 +5,9 @@ This is the web application for advertisement analysis based on Multi-Touch Attr
 
 ## Usage
 
-Replace the DCRMTA_c.pth model with your own model in /django_app/torch_models.
+Replace the DCRMTA_c.pth model with your own model in ``/django_app/torch_models``.
 
-The data path is /django_app/files. You may change this to your data and attribution results.
+The data path is ``/django_app/files``. You may change this to your data and attribution results.
 
 Run with command
 ```
